@@ -18,6 +18,8 @@ contract KdexICO is Ownable {
     uint256 public kdexPrice = 100;  // 100 kdex /1 kcs
     bool public saleIsOver = false;  // sale is over, token will be distributed when it is true
     bool public icoPaused = true;  // ico start after this is false;
+    uint256 public minKdexAmount = 10;
+    uint256 public maxKdexAmount = 100;
 
     constructor (address _kdexAddress) {
         kdexAddress = _kdexAddress;
@@ -47,6 +49,7 @@ contract KdexICO is Ownable {
         require(msg.value > 0, "You should send positive amount!");
         uint256 tokenAmount = kdexPrice.mul(msg.value);
         require(kdexBalance() > kdexSoldAmount + tokenAmount, "Token is not enough!");
+        require(minKdexAmount <= tokenAmount && maxKdexAmount >= tokenAmount, "You can buy tokens from 10 to 100!");
         kdexSoldAmount += tokenAmount;
         salesBalance[msg.sender] += tokenAmount;
     }
